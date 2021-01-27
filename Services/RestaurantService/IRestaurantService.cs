@@ -6,8 +6,8 @@ namespace Restaurant_Pick.Services.RestaurantService
 {
     public interface IRestaurantService
     {
-         Task<List<Restaurant>> GetAllRestaurants();
-         Task<Restaurant> GetRestaurantById(int id);
-         Task<List<Restaurant>> AddRestaurant(Restaurant newRestaurant);
+         Task<ServiceResponse<List<Restaurant>>> GetAllRestaurants();
+         Task<ServiceResponse<Restaurant>> GetRestaurantById(int id);
+         Task<ServiceResponse<List<Restaurant>>> AddRestaurant(Restaurant newRestaurant);
     }
 }
