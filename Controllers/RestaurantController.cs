@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.Models;
+using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
 {
@@ -9,29 +9,28 @@ namespace Restaurant_Pick.Controllers
     [Route("[controller]")]
     public class RestaurantController : Controller
     {
-        private static List<Restaurant> restaurants = new List<Restaurant>
+        private readonly IRestaurantService _restaurantService;
+        public RestaurantController(IRestaurantService restaurantService)
         {
-            new Restaurant(),
-            new Restaurant { Id = 1, Name = "Busaba", Location = "Stratford"}
-        };
+            this._restaurantService = restaurantService;
+        }
 
         [HttpGet("GetAll")]
         public IActionResult Get()
         {
-            return Ok(restaurants);
+            return Ok(_restaurantService.GetAllRestaurants());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetSingle(int id)
         {
-            return Ok(restaurants.FirstOrDefault(c => c.Id == id));
+            return Ok(_restaurantService.GetRestaurantById(id));
         }
 
         [HttpPost]
-        public IActionResult AddRestaurant(Restaurant restaurant)
+        public IActionResult AddRestaurant(Restaurant newRestaurant)
         {
-            restaurants.Add(restaurant);
-            return Ok(restaurants);
+            return Ok(_restaurantService.AddRestaurant(newRestaurant));
         }
     }
 }
