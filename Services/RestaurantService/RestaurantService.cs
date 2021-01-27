@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Restaurant_Pick.Models;
 
 namespace Restaurant_Pick.Services.RestaurantService
@@ -12,18 +13,18 @@ namespace Restaurant_Pick.Services.RestaurantService
             new Restaurant { Id = 1, Name = "Busaba", Location = "Stratford"}
         };
 
-        public List<Restaurant> AddRestaurant(Restaurant newRestaurant)
+        public async Task<List<Restaurant>> AddRestaurant(Restaurant newRestaurant)
         {
             restaurants.Add(newRestaurant);
             return restaurants;
         }
 
-        public List<Restaurant> GetAllRestaurants()
+        public async Task<List<Restaurant>> GetAllRestaurants()
         {
             return restaurants;
         }
 
-        public Restaurant GetRestaurantById(int id)
+        public async Task<Restaurant> GetRestaurantById(int id)
         {
             return restaurants.FirstOrDefault(c => c.Id == id);
         }

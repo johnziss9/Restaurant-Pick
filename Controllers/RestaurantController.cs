@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.Models;
 using Restaurant_Pick.Services.RestaurantService;
@@ -16,21 +17,21 @@ namespace Restaurant_Pick.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(_restaurantService.GetAllRestaurants());
+            return Ok(await _restaurantService.GetAllRestaurants());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetSingle(int id)
+        public async Task<IActionResult> GetSingle(int id)
         {
-            return Ok(_restaurantService.GetRestaurantById(id));
+            return Ok(await _restaurantService.GetRestaurantById(id));
         }
 
         [HttpPost]
-        public IActionResult AddRestaurant(Restaurant newRestaurant)
+        public async Task<IActionResult> AddRestaurant(Restaurant newRestaurant)
         {
-            return Ok(_restaurantService.AddRestaurant(newRestaurant));
+            return Ok(await _restaurantService.AddRestaurant(newRestaurant));
         }
     }
 }
