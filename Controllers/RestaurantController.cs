@@ -12,7 +12,7 @@ namespace Restaurant_Pick.Controllers
         private static List<Restaurant> restaurants = new List<Restaurant>
         {
             new Restaurant(),
-            new Restaurant { Id = 1, Name = "Busaba"}
+            new Restaurant { Id = 1, Name = "Busaba", Location = "Stratford"}
         };
 
         [HttpGet("GetAll")]
@@ -25,6 +25,13 @@ namespace Restaurant_Pick.Controllers
         public IActionResult GetSingle(int id)
         {
             return Ok(restaurants.FirstOrDefault(c => c.Id == id));
+        }
+
+        [HttpPost]
+        public IActionResult AddRestaurant(Restaurant restaurant)
+        {
+            restaurants.Add(restaurant);
+            return Ok(restaurants);
         }
     }
 }
