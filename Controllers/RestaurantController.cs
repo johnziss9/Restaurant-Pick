@@ -1,7 +1,6 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_Pick.Models;
+using Restaurant_Pick.DTOs.Restaurant;
 using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
@@ -29,7 +28,7 @@ namespace Restaurant_Pick.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRestaurant(Restaurant newRestaurant)
+        public async Task<IActionResult> AddRestaurant(AddRestaurantDTO newRestaurant)
         {
             return Ok(await _restaurantService.AddRestaurant(newRestaurant));
         }

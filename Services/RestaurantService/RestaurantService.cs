@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Restaurant_Pick.DTOs.Restaurant;
 using Restaurant_Pick.Models;
 
 namespace Restaurant_Pick.Services.RestaurantService
@@ -13,25 +15,34 @@ namespace Restaurant_Pick.Services.RestaurantService
             new Restaurant { Id = 1, Name = "Busaba", Location = "Stratford"}
         };
 
-        public async Task<ServiceResponse<List<Restaurant>>> AddRestaurant(Restaurant newRestaurant)
+        private readonly IMapper _mapper;
+
+        public RestaurantService(IMapper mapper)
         {
-            ServiceResponse<List<Restaurant>> serviceResponse = new ServiceResponse<List<Restaurant>>();
-            restaurants.Add(newRestaurant);
-            serviceResponse.Data = restaurants;
+            this._mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> AddRestaurant(AddRestaurantDTO newRestaurant)
+        {
+            ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
+            Restaurant restaurant = _mapper.Map<Restaurant>(newRestaurant);
+            restaurant.Id = restaurants.Max(c => c.Id) + 1;
+            restaurants.Add(restaurant);
+            serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Restaurant>>> GetAllRestaurants()
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllRestaurants()
         {
-            ServiceResponse<List<Restaurant>> serviceResponse = new ServiceResponse<List<Restaurant>>();
-            serviceResponse.Data = restaurants;
+            ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
+            serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Restaurant>> GetRestaurantById(int id)
+        public async Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id)
         {
-            ServiceResponse<Restaurant> serviceResponse = new ServiceResponse<Restaurant>();
-            serviceResponse.Data = restaurants.FirstOrDefault(c => c.Id == id);
+            ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
+            serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(restaurants.FirstOrDefault(c => c.Id == id));
             return serviceResponse;
         }
     }
