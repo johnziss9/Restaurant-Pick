@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,30 @@ namespace Restaurant_Pick.Services.RestaurantService
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
             serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(restaurants.FirstOrDefault(c => c.Id == id));
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetRestaurantDTO>> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant)
+        {
+            ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
+            
+            try
+            {
+                Restaurant restaurant = restaurants.FirstOrDefault(c => c.Id == updateRestaurant.Id);
+                restaurant.Name = updateRestaurant.Name;
+                restaurant.Cuisine = updateRestaurant.Cuisine;
+                restaurant.Location = updateRestaurant.Location;
+                restaurant.Visited = updateRestaurant.Visited;
+                restaurant.Deleted = updateRestaurant.Deleted;
+
+                serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(restaurant);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }            
+
             return serviceResponse;
         }
     }

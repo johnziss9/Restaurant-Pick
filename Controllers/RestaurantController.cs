@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.DTOs.Restaurant;
+using Restaurant_Pick.Models;
 using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
@@ -31,6 +32,17 @@ namespace Restaurant_Pick.Controllers
         public async Task<IActionResult> AddRestaurant(AddRestaurantDTO newRestaurant)
         {
             return Ok(await _restaurantService.AddRestaurant(newRestaurant));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant)
+        {
+            ServiceResponse<GetRestaurantDTO> response = await _restaurantService.UpdateRestaurant(updateRestaurant);
+
+            if (response.Data == null)
+                return NotFound(response);
+
+            return Ok(response);
         }
     }
 }

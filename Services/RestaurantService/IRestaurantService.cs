@@ -10,5 +10,6 @@ namespace Restaurant_Pick.Services.RestaurantService
          Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllRestaurants();
          Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id);
          Task<ServiceResponse<List<GetRestaurantDTO>>> AddRestaurant(AddRestaurantDTO newRestaurant);
+         Task<ServiceResponse<GetRestaurantDTO>>UpdateRestaurant(UpdateRestaurantDTO updateRestaurant);
     }
 }
