@@ -70,5 +70,25 @@ namespace Restaurant_Pick.Services.RestaurantService
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> DeleteRestaurant(int id)
+        {
+            ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
+
+            try
+            {
+                Restaurant restaurant = restaurants.First(c => c.Id == id);
+                restaurants.Remove(restaurant);
+
+                serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+
+            return serviceResponse;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.DTOs.Restaurant;
@@ -38,6 +39,17 @@ namespace Restaurant_Pick.Controllers
         public async Task<IActionResult> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant)
         {
             ServiceResponse<GetRestaurantDTO> response = await _restaurantService.UpdateRestaurant(updateRestaurant);
+
+            if (response.Data == null)
+                return NotFound(response);
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            ServiceResponse<List<GetRestaurantDTO>> response = await _restaurantService.DeleteRestaurant(id);
 
             if (response.Data == null)
                 return NotFound(response);
