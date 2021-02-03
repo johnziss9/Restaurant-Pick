@@ -13,7 +13,7 @@ namespace Restaurant_Pick.Services.RestaurantService
         private static List<Restaurant> restaurants = new List<Restaurant>
         {
             new Restaurant(),
-            new Restaurant { Id = 1, Name = "Busaba", Location = "Stratford"}
+            new Restaurant { Id = 1, Name = "Busaba", Cuisine = CuisineClass.Thai, Location = "Stratford"}
         };
 
         private readonly IMapper _mapper;
