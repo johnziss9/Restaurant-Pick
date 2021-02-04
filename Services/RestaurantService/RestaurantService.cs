@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Restaurant_Pick.Data;
 using Restaurant_Pick.DTOs.Restaurant;
 using Restaurant_Pick.Models;
 
@@ -10,16 +12,12 @@ namespace Restaurant_Pick.Services.RestaurantService
 {
     public class RestaurantService : IRestaurantService
     {
-        private static List<Restaurant> restaurants = new List<Restaurant>
-        {
-            new Restaurant(),
-            new Restaurant { Id = 1, Name = "Busaba", Cuisine = CuisineClass.Thai, Location = "Stratford"}
-        };
-
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public RestaurantService(IMapper mapper)
+        public RestaurantService(IMapper mapper, DataContext context)
         {
+            this._context = context;
             this._mapper = mapper;
         }
 
@@ -27,38 +25,43 @@ namespace Restaurant_Pick.Services.RestaurantService
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
             Restaurant restaurant = _mapper.Map<Restaurant>(newRestaurant);
-            restaurant.Id = restaurants.Max(c => c.Id) + 1;
-            restaurants.Add(restaurant);
-            serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
+            await _context.Restaurants.AddAsync(restaurant);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = (_context.Restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllRestaurants()
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
-            serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
+            List<Restaurant> dbRestaurants = await _context.Restaurants.ToListAsync();
+            serviceResponse.Data = (dbRestaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id)
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
-            serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(restaurants.FirstOrDefault(c => c.Id == id));
+            Restaurant dbRestaurant = await _context.Restaurants.FirstOrDefaultAsync(c => c.Id == id);
+            serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(dbRestaurant);
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetRestaurantDTO>> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant)
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
-            
+
             try
             {
-                Restaurant restaurant = restaurants.FirstOrDefault(c => c.Id == updateRestaurant.Id);
+                Restaurant restaurant = await _context.Restaurants.FirstOrDefaultAsync(c => c.Id == updateRestaurant.Id);
                 restaurant.Name = updateRestaurant.Name;
                 restaurant.Cuisine = updateRestaurant.Cuisine;
                 restaurant.Location = updateRestaurant.Location;
                 restaurant.Visited = updateRestaurant.Visited;
                 restaurant.Deleted = updateRestaurant.Deleted;
+
+                _context.Restaurants.Update(restaurant);
+                await _context.SaveChangesAsync();
 
                 serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(restaurant);
             }
@@ -66,7 +69,7 @@ namespace Restaurant_Pick.Services.RestaurantService
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
-            }            
+            }
 
             return serviceResponse;
         }
@@ -77,12 +80,14 @@ namespace Restaurant_Pick.Services.RestaurantService
 
             try
             {
-                Restaurant restaurant = restaurants.First(c => c.Id == id);
-                restaurants.Remove(restaurant);
+                Restaurant restaurant = await _context.Restaurants.FirstAsync(c => c.Id == id);
+                _context.Restaurants.Remove(restaurant);
 
-                serviceResponse.Data = (restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = (_context.Restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
