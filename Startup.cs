@@ -1,10 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Restaurant_Pick.Data;
 using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick
@@ -21,7 +23,7 @@ namespace Restaurant_Pick
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddAutoMapper(typeof(Startup));
