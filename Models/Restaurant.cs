@@ -10,7 +10,7 @@ namespace Restaurant_Pick.Models
         public string Location { get; set; } = "Soho";
         public bool Visited { get; set; } = false;
         public bool Deleted { get; set; } = false;
-        public int AddedBy { get; set; }
+        public User AddedBy { get; set; }
         public DateTime AddedOn { get; set; } = DateTime.Now;
     }
 }

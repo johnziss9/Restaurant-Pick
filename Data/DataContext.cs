@@ -8,5 +8,6 @@ namespace Restaurant_Pick.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_Pick.Data;
 
 namespace Restaurant_Pick.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210210120203_Users")]
+    partial class Users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +28,7 @@ namespace Restaurant_Pick.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("AddedById")
+                    b.Property<int>("AddedBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AddedOn")
@@ -48,8 +50,6 @@ namespace Restaurant_Pick.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddedById");
 
                     b.ToTable("Restaurants");
                 });
@@ -73,15 +73,6 @@ namespace Restaurant_Pick.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Restaurant_Pick.Models.Restaurant", b =>
-                {
-                    b.HasOne("Restaurant_Pick.Models.User", "AddedBy")
-                        .WithMany()
-                        .HasForeignKey("AddedById");
-
-                    b.Navigation("AddedBy");
                 });
 #pragma warning restore 612, 618
         }
