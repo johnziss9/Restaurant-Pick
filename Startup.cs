@@ -31,6 +31,7 @@ namespace Restaurant_Pick
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restaurant_Pick", Version = "v1" });
             });
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
