@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Restaurant_Pick.Models;
 
 namespace Restaurant_Pick.Data
@@ -19,6 +20,16 @@ namespace Restaurant_Pick.Data
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
+            ServiceResponse<int> response = new ServiceResponse<int>();
+
+            if (await UserExist(user.Username))
+            {
+                response.Success = false;
+                response.Message = "User already exists.";
+                
+                return response;
+            }
+
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
@@ -27,15 +38,17 @@ namespace Restaurant_Pick.Data
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            ServiceResponse<int> response = new ServiceResponse<int>();
             response.Data = user.Id;
 
             return response;
         }
 
-        public Task<bool> UserExist(string username)
+        public async Task<bool> UserExist(string username)
         {
-            throw new System.NotImplementedException();
+            if (await _context.Users.AnyAsync(c => c.Username.ToLower() == username.ToLower()))
+                return true;
+
+            return false;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
