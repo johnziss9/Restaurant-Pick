@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.DTOs.Restaurant;
 using Restaurant_Pick.Models;
@@ -7,6 +8,7 @@ using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class RestaurantController : Controller
