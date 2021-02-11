@@ -1,5 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Restaurant_Pick.Models;
 
 namespace Restaurant_Pick.Data
@@ -7,8 +13,10 @@ namespace Restaurant_Pick.Data
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
-        public AuthRepository(DataContext context)
+        private readonly IConfiguration _configuration;
+        public AuthRepository(DataContext context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
 
         }
@@ -30,7 +38,7 @@ namespace Restaurant_Pick.Data
                 response.Message = "Wrong passwrod.";
             }
             else
-                response.Data = user.Id.ToString();
+                response.Data = CreateToken(user);
 
             return response;
         }
@@ -43,7 +51,7 @@ namespace Restaurant_Pick.Data
             {
                 response.Success = false;
                 response.Message = "User already exists.";
-                
+
                 return response;
             }
 
@@ -91,6 +99,28 @@ namespace Restaurant_Pick.Data
 
                 return true;
             }
+        }
+
+        private string CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = credentials
+            };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }
