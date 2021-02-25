@@ -31,7 +31,7 @@ namespace Restaurant_Pick.Services.RestaurantService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllRestaurants()
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllRestaurantsNotVisited()
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
             List<Restaurant> dbRestaurants = await _context.Restaurants.ToListAsync();
@@ -42,7 +42,7 @@ namespace Restaurant_Pick.Services.RestaurantService
         public async Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id)
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
-            Restaurant dbRestaurant = await _context.Restaurants.FirstOrDefaultAsync(c => c.Id == id);
+            Restaurant dbRestaurant = await _context.Restaurants.Where(r => r.Visited == false).FirstOrDefaultAsync(c => c.Id == id);
             serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(dbRestaurant);
             return serviceResponse;
         }
