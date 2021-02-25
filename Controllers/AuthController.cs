@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.Data;
 using Restaurant_Pick.DTOs.User;
@@ -8,6 +9,7 @@ namespace Restaurant_Pick.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepo;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant_Pick.DTOs.Restaurant;
 using Restaurant_Pick.Models;
@@ -8,9 +9,10 @@ using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     public class RestaurantController : Controller
     {
         private readonly IRestaurantService _restaurantService;
@@ -57,6 +59,12 @@ namespace Restaurant_Pick.Controllers
                 return NotFound(response);
 
             return Ok(response);
+        }
+
+        [HttpGet("GetAllCuisines")]
+        public async Task<IActionResult> GetCuisines()
+        {
+            return Ok(await _restaurantService.GetAllCuisines());
         }
     }
 }

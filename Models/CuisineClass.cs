@@ -10,7 +10,7 @@ namespace Restaurant_Pick.Models
         Korean = 6,
         Italian = 7,
         Indian = 8,
-        Cypriot = 9,
+        Greek = 9,
         Turkish = 10,
         Thai = 11,
         Spanish = 12,
@@ -21,6 +21,8 @@ namespace Restaurant_Pick.Models
         Brazilian = 17,
         Polish = 18,
         French = 19,
-        Other = 20
+        Other = 20,
+        Irish = 21,
+        Scottish = 22
     }
 }

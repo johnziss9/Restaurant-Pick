@@ -95,5 +95,13 @@ namespace Restaurant_Pick.Services.RestaurantService
 
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<CuisineClass>>> GetAllCuisines()
+        {
+            ServiceResponse<List<CuisineClass>> serviceResponse = new ServiceResponse<List<CuisineClass>>();
+            List<string> cuisines = Enum.GetNames(typeof(CuisineClass)).ToList();
+            serviceResponse.Data = (cuisines.Select(c => _mapper.Map<CuisineClass>(c))).ToList();
+            return serviceResponse;
+        }
     }
 }

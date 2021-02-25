@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,7 @@ namespace Restaurant_Pick
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));;
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
@@ -44,6 +45,17 @@ namespace Restaurant_Pick
                     ValidateAudience = false
                 };
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +71,8 @@ namespace Restaurant_Pick
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options => options.WithOrigins("https://localhost:5001"));
 
             app.UseAuthentication();
 
