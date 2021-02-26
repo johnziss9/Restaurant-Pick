@@ -10,8 +10,8 @@ using Restaurant_Pick.Data;
 namespace Restaurant_Pick.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210210120531_ModificationOfAddedBy")]
-    partial class ModificationOfAddedBy
+    [Migration("20210226095226_User")]
+    partial class User
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,9 +27,6 @@ namespace Restaurant_Pick.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<int?>("AddedById")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
@@ -50,8 +47,6 @@ namespace Restaurant_Pick.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddedById");
 
                     b.ToTable("Restaurants");
                 });
@@ -75,15 +70,6 @@ namespace Restaurant_Pick.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Restaurant_Pick.Models.Restaurant", b =>
-                {
-                    b.HasOne("Restaurant_Pick.Models.User", "AddedBy")
-                        .WithMany()
-                        .HasForeignKey("AddedById");
-
-                    b.Navigation("AddedBy");
                 });
 #pragma warning restore 612, 618
         }

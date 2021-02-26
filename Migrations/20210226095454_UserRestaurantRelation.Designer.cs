@@ -10,8 +10,8 @@ using Restaurant_Pick.Data;
 namespace Restaurant_Pick.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210210115355_AdditionalRestaurantDetails")]
-    partial class AdditionalRestaurantDetails
+    [Migration("20210226095454_UserRestaurantRelation")]
+    partial class UserRestaurantRelation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,7 @@ namespace Restaurant_Pick.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("AddedBy")
+                    b.Property<int?>("AddedById")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AddedOn")
@@ -51,7 +51,39 @@ namespace Restaurant_Pick.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddedById");
+
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("Restaurant_Pick.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Restaurant_Pick.Models.Restaurant", b =>
+                {
+                    b.HasOne("Restaurant_Pick.Models.User", "AddedBy")
+                        .WithMany()
+                        .HasForeignKey("AddedById");
+
+                    b.Navigation("AddedBy");
                 });
 #pragma warning restore 612, 618
         }

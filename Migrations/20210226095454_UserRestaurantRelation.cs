@@ -2,14 +2,10 @@
 
 namespace Restaurant_Pick.Migrations
 {
-    public partial class ModificationOfAddedBy : Migration
+    public partial class UserRestaurantRelation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "AddedBy",
-                table: "Restaurants");
-
             migrationBuilder.AddColumn<int>(
                 name: "AddedById",
                 table: "Restaurants",
@@ -43,13 +39,6 @@ namespace Restaurant_Pick.Migrations
             migrationBuilder.DropColumn(
                 name: "AddedById",
                 table: "Restaurants");
-
-            migrationBuilder.AddColumn<int>(
-                name: "AddedBy",
-                table: "Restaurants",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
         }
     }
 }
