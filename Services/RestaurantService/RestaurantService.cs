@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Pick.Data;
 using Restaurant_Pick.DTOs.Restaurant;
@@ -14,17 +16,22 @@ namespace Restaurant_Pick.Services.RestaurantService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RestaurantService(IMapper mapper, DataContext context)
+        public RestaurantService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
-            this._context = context;
-            this._mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _context = context;
+            _mapper = mapper;
         }
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<List<GetRestaurantDTO>>> AddRestaurant(AddRestaurantDTO newRestaurant)
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
             Restaurant restaurant = _mapper.Map<Restaurant>(newRestaurant);
+            restaurant.AddedBy = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
             await _context.Restaurants.AddAsync(restaurant);
             await _context.SaveChangesAsync();
             serviceResponse.Data = (_context.Restaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();

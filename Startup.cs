@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +57,7 @@ namespace Restaurant_Pick
                         .AllowAnyHeader();
                     });
             });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

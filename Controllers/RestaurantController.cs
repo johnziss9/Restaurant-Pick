@@ -9,7 +9,7 @@ using Restaurant_Pick.Services.RestaurantService;
 
 namespace Restaurant_Pick.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     [EnableCors("AllowAll")]
