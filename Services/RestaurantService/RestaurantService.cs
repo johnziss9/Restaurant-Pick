@@ -30,6 +30,15 @@ namespace Restaurant_Pick.Services.RestaurantService
         public async Task<ServiceResponse<List<GetRestaurantDTO>>> AddRestaurant(AddRestaurantDTO newRestaurant)
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
+
+            if (await RestaurantExists(newRestaurant.Name))
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Restaurant already exists.";
+
+                return serviceResponse;
+            }
+
             Restaurant restaurant = _mapper.Map<Restaurant>(newRestaurant);
             restaurant.AddedBy = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
             await _context.Restaurants.AddAsync(restaurant);
@@ -109,6 +118,14 @@ namespace Restaurant_Pick.Services.RestaurantService
             List<string> cuisines = Enum.GetNames(typeof(CuisineClass)).ToList();
             serviceResponse.Data = (cuisines.Select(c => _mapper.Map<CuisineClass>(c))).ToList();
             return serviceResponse;
+        }
+
+        public async Task<bool> RestaurantExists(string restaurant)
+        {
+            if (await _context.Restaurants.AnyAsync(r => r.Name.ToLower() == restaurant.ToLower()))
+                return true;
+
+            return false;
         }
     }
 }

@@ -13,5 +13,6 @@ namespace Restaurant_Pick.Services.RestaurantService
          Task<ServiceResponse<GetRestaurantDTO>> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant);
          Task<ServiceResponse<List<GetRestaurantDTO>>> DeleteRestaurant(int id);
          Task<ServiceResponse<List<CuisineClass>>> GetAllCuisines();
+         Task<bool> RestaurantExists(string restaurant);
     }
 }
