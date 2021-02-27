@@ -21,10 +21,16 @@ namespace Restaurant_Pick.Controllers
             this._restaurantService = restaurantService;
         }
 
-        [HttpGet("GetAllNotVisited")]
-        public async Task<IActionResult> Get()
+        [HttpGet("GetUnvisited")]
+        public async Task<IActionResult> GetUnvisited()
         {
-            return Ok(await _restaurantService.GetAllRestaurantsNotVisited());
+            return Ok(await _restaurantService.GetAllUnvisitedRestaurants());
+        }
+
+        [HttpGet("GetVisited")]
+        public async Task<IActionResult> GetVisited()
+        {
+            return Ok(await _restaurantService.GetAllVisitedRestaurants());
         }
 
         [HttpGet("{id}")]
