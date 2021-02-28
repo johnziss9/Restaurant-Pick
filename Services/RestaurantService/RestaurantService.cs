@@ -47,7 +47,7 @@ namespace Restaurant_Pick.Services.RestaurantService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllUnvisitedRestaurants()
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllNotVisitedRestaurants()
         {
             ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
             List<Restaurant> dbRestaurants = await _context.Restaurants.Where(r => r.Visited == false).ToListAsync();

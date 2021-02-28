@@ -7,7 +7,7 @@ namespace Restaurant_Pick.Services.RestaurantService
 {
     public interface IRestaurantService
     {
-         Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllUnvisitedRestaurants();
+         Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllNotVisitedRestaurants();
          Task<ServiceResponse<List<GetRestaurantDTO>>> GetAllVisitedRestaurants();
          Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id);
          Task<ServiceResponse<List<GetRestaurantDTO>>> AddRestaurant(AddRestaurantDTO newRestaurant);
