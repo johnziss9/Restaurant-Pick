@@ -12,5 +12,6 @@ namespace Restaurant_Pick.Models
         public bool Deleted { get; set; } = false;
         public User AddedBy { get; set; }
         public DateTime AddedOn { get; set; } = DateTime.Now;
+        public DateTime DateVisited { get; set; } = DateTime.Now;
     }
 }

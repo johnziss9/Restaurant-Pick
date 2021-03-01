@@ -79,6 +79,14 @@ namespace Restaurant_Pick.Services.RestaurantService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantByVisitedDate()
+        {
+            ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
+            Restaurant dbRestaurant = await _context.Restaurants.FirstOrDefaultAsync(c => c.DateVisited >= DateTime.Now);
+            serviceResponse.Data = _mapper.Map<GetRestaurantDTO>(dbRestaurant);
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<GetRestaurantDTO>> UpdateRestaurant(UpdateRestaurantDTO updateRestaurant)
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
@@ -91,6 +99,7 @@ namespace Restaurant_Pick.Services.RestaurantService
                 restaurant.Location = updateRestaurant.Location;
                 restaurant.Visited = updateRestaurant.Visited;
                 restaurant.Deleted = updateRestaurant.Deleted;
+                restaurant.DateVisited = updateRestaurant.DateVisited;
 
                 _context.Restaurants.Update(restaurant);
                 await _context.SaveChangesAsync();

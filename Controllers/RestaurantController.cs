@@ -45,6 +45,12 @@ namespace Restaurant_Pick.Controllers
             return Ok(await _restaurantService.GetRestaurantById(id));
         }
 
+        [HttpGet("GetVisitedSingle")]
+        public async Task<IActionResult> GetVisitedSingle()
+        {
+            return Ok(await _restaurantService.GetRestaurantByVisitedDate());
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddRestaurant(AddRestaurantDTO newRestaurant)
         {

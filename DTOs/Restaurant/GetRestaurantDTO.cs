@@ -10,5 +10,7 @@ namespace Restaurant_Pick.DTOs.Restaurant
         public CuisineClass Cuisine { get; set; } = CuisineClass.American;
         public string Location { get; set; } = "Soho";
         public bool Visited { get; set; } = false;
+        public DateTime DateVisited { get; set; } = DateTime.Now;
+
     }
 }
