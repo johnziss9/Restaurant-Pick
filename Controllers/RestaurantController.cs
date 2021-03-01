@@ -33,6 +33,12 @@ namespace Restaurant_Pick.Controllers
             return Ok(await _restaurantService.GetAllVisitedRestaurants());
         }
 
+        [HttpGet("GetUserRestaurants")]
+        public async Task<IActionResult> GetUserRestaurants()
+        {
+            return Ok(await _restaurantService.GetUserRestaurants());
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {

@@ -63,6 +63,14 @@ namespace Restaurant_Pick.Services.RestaurantService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetRestaurantDTO>>> GetUserRestaurants()
+        {
+            ServiceResponse<List<GetRestaurantDTO>> serviceResponse = new ServiceResponse<List<GetRestaurantDTO>>();
+            List<Restaurant> dbRestaurants = await _context.Restaurants.Where(r => r.AddedBy.Id == GetUserId()).ToListAsync();
+            serviceResponse.Data = (dbRestaurants.Select(c => _mapper.Map<GetRestaurantDTO>(c))).ToList();
+            return serviceResponse;
+        }
+
         public async Task<ServiceResponse<GetRestaurantDTO>> GetRestaurantById(int id)
         {
             ServiceResponse<GetRestaurantDTO> serviceResponse = new ServiceResponse<GetRestaurantDTO>();
