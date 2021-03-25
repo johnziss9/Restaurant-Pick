@@ -75,7 +75,7 @@ namespace Restaurant_Pick
 
             app.UseRouting();
 
-            app.UseCors(options => options.WithOrigins("https://localhost:5001"));
+            app.UseCors(options => options.WithOrigins("http://whiletrueconnect.ddns.net:5000", "https://whiletrueconnect.dnns.net:5001"));
 
             app.UseAuthentication();
 
